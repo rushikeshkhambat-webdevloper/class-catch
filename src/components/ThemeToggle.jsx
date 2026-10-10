@@ -19,6 +19,32 @@ export default function ThemeToggle({ variant = 'default' }) {
     );
   }
 
+  if (variant === 'menu') {
+    return (
+      <button
+        onClick={toggleTheme}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          width: '100%',
+          padding: '11px 14px',
+          fontSize: 13.5,
+          fontWeight: 500,
+          background: 'transparent',
+          color: 'var(--text-primary)',
+          border: 'none',
+          borderRadius: 0,
+          justifyContent: 'flex-start',
+          cursor: 'pointer',
+        }}
+      >
+        <span style={{ fontSize: 15 }}>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </span>
+        <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
+      </button>
+    );
+  }
+
   return (
     <button
       onClick={toggleTheme}

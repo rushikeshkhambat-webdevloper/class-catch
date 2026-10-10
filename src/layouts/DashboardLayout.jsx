@@ -1,5 +1,5 @@
 import { Outlet, NavLink, Link, useNavigate } from 'react-router-dom';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import ThemeToggle from '../components/ThemeToggle';
 
@@ -7,12 +7,25 @@ export default function DashboardLayout() {
   const { user, role, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
-  useEffect(() => { setDrawerOpen(false); }, [navigate]);
+  useEffect(() => { setDrawerOpen(false); setMenuOpen(false); }, [navigate]);
+
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [drawerOpen]);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    }
+    if (menuOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [menuOpen]);
 
   async function handleLogout() {
     await logout();
@@ -41,10 +54,8 @@ export default function DashboardLayout() {
 
   const SidebarContent = () => (
     <>
-      {/* Brand */}
       <div style={{
-        padding: '0 20px',
-        height: 68,
+        padding: '0 20px', height: 68,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         borderBottom: '1px solid var(--sidebar-border)',
         flexShrink: 0,
@@ -58,7 +69,7 @@ export default function DashboardLayout() {
             background: '#0f766e',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 12, fontWeight: 700, color: 'white',
-            letterSpacing: '-0.01em', flexShrink: 0,
+            flexShrink: 0,
           }}>
             CC
           </div>
@@ -82,23 +93,22 @@ export default function DashboardLayout() {
         </button>
       </div>
 
-      {/* Nav */}
       <nav style={{ flex: 1, padding: '4px 12px 12px', overflowY: 'auto' }}>
         <SectionLabel>Main</SectionLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <NavLink to="/dashboard" className={linkClass} onClick={() => setDrawerOpen(false)}>
+          <NavLink to="/dashboard" className={linkClass}>
             <span style={{ fontSize: 15, lineHeight: 1, width: 18, textAlign: 'center' }}>🏠</span>
             <span>Dashboard</span>
           </NavLink>
-          <NavLink to="/videos" className={linkClass} onClick={() => setDrawerOpen(false)}>
+          <NavLink to="/videos" className={linkClass}>
             <span style={{ fontSize: 15, lineHeight: 1, width: 18, textAlign: 'center' }}>🎥</span>
             <span>Videos</span>
           </NavLink>
-          <NavLink to="/notes" className={linkClass} onClick={() => setDrawerOpen(false)}>
+          <NavLink to="/notes" className={linkClass}>
             <span style={{ fontSize: 15, lineHeight: 1, width: 18, textAlign: 'center' }}>📝</span>
             <span>Notes</span>
           </NavLink>
-          <NavLink to="/upload" className={linkClass} onClick={() => setDrawerOpen(false)}>
+          <NavLink to="/upload" className={linkClass}>
             <span style={{ fontSize: 15, lineHeight: 1, width: 18, textAlign: 'center' }}>⬆️</span>
             <span>Upload</span>
           </NavLink>
@@ -106,7 +116,7 @@ export default function DashboardLayout() {
 
         <SectionLabel>AI</SectionLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <NavLink to="/chat" className={linkClass} onClick={() => setDrawerOpen(false)}>
+          <NavLink to="/chat" className={linkClass}>
             <span style={{ fontSize: 15, lineHeight: 1, width: 18, textAlign: 'center' }}>💬</span>
             <span>AI Assistant</span>
           </NavLink>
@@ -114,14 +124,13 @@ export default function DashboardLayout() {
 
         <SectionLabel>Account</SectionLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <NavLink to="/profile" className={linkClass} onClick={() => setDrawerOpen(false)}>
+          <NavLink to="/profile" className={linkClass}>
             <span style={{ fontSize: 15, lineHeight: 1, width: 18, textAlign: 'center' }}>👤</span>
             <span>Profile</span>
           </NavLink>
         </div>
       </nav>
 
-      {/* User footer */}
       <div style={{
         padding: 14,
         borderTop: '1px solid var(--sidebar-border)',
@@ -183,12 +192,9 @@ export default function DashboardLayout() {
       <aside
         className="hidden lg:flex"
         style={{
-          width: 240,
-          flexShrink: 0,
+          width: 240, flexShrink: 0,
           flexDirection: 'column',
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
+          position: 'sticky', top: 0, height: '100vh',
           background: 'var(--sidebar-bg)',
           borderRight: '1px solid var(--sidebar-border)',
         }}
@@ -200,11 +206,11 @@ export default function DashboardLayout() {
       {drawerOpen && (
         <div
           onClick={() => setDrawerOpen(false)}
+          className="lg:hidden"
           style={{
             position: 'fixed', inset: 0, zIndex: 40,
             background: 'rgba(0,0,0,0.5)',
           }}
-          className="lg:hidden"
         />
       )}
 
@@ -253,6 +259,7 @@ export default function DashboardLayout() {
               <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
+
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{
               width: 28, height: 28, borderRadius: 7,
@@ -270,13 +277,108 @@ export default function DashboardLayout() {
               Class Catch
             </span>
           </div>
+
+          {/* User avatar dropdown (mobile) */}
+          <div ref={menuRef} style={{ marginLeft: 'auto', position: 'relative' }}>
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+              }}
+              aria-label="Account menu"
+            >
+              <div style={{
+                width: 34, height: 34, borderRadius: 9999,
+                background: '#0f766e',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'white', fontSize: 13, fontWeight: 700,
+              }}>
+                {user?.name?.[0]?.toUpperCase() || '?'}
+              </div>
+            </button>
+
+            {menuOpen && (
+              <div style={{
+                position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+                minWidth: 220,
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: 12,
+                boxShadow: '0 10px 24px rgba(0,0,0,0.15)',
+                overflow: 'hidden',
+                zIndex: 60,
+              }}>
+                {/* User info */}
+                <div style={{
+                  padding: '12px 14px',
+                  borderBottom: '1px solid var(--border)',
+                }}>
+                  <p style={{
+                    fontSize: 13, fontWeight: 600,
+                    color: 'var(--text-primary)',
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
+                    {user?.name}
+                  </p>
+                  <p style={{
+                    fontSize: 11, color: 'var(--text-tertiary)',
+                    textTransform: 'capitalize', marginTop: 2,
+                  }}>
+                    {role}
+                  </p>
+                </div>
+
+                {/* Menu items */}
+                <Link
+                  to="/profile"
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '11px 14px',
+                    fontSize: 13.5,
+                    color: 'var(--text-primary)',
+                    textDecoration: 'none',
+                    borderBottom: '1px solid var(--border)',
+                  }}
+                >
+                  <span style={{ fontSize: 15 }}>👤</span>
+                  <span>Profile</span>
+                </Link>
+
+                <div style={{ padding: '4px 0' }}>
+                  <ThemeToggle variant="menu" />
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    width: '100%',
+                    padding: '11px 14px',
+                    fontSize: 13.5,
+                    fontWeight: 500,
+                    background: 'transparent',
+                    color: 'var(--danger)',
+                    border: 'none',
+                    borderTop: '1px solid var(--border)',
+                    borderRadius: 0,
+                    justifyContent: 'flex-start',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <span style={{ fontSize: 15 }}>🚪</span>
+                  <span>Sign out</span>
+                </button>
+              </div>
+            )}
+          </div>
         </header>
 
         <main style={{ flex: 1, overflowX: 'hidden' }}>
-          <div style={{
-            padding: '24px 20px',
-            maxWidth: 1280,
-          }} className="sm:p-8">
+          <div className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
             <Outlet />
           </div>
         </main>
