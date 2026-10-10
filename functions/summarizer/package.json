@@ -1,0 +1,13 @@
+{
+  "name": "summarizer",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/main.js",
+  "dependencies": {
+    "ai": "^4.0.0",
+    "@ai-sdk/groq": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}

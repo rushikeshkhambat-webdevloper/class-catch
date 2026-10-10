@@ -1,0 +1,251 @@
+{
+    "organizationId": "6aba697900190e452f86",
+    "projectId": "6ac75ef4002e5a4e2382",
+    "projectName": "class Catch",
+    "endpoint": "https://fra.cloud.appwrite.io/v1",
+    "settings": {
+        "services": {
+            "account": true,
+            "avatars": true,
+            "databases": true,
+            "locale": true,
+            "health": true,
+            "storage": true,
+            "teams": true,
+            "users": true,
+            "sites": true,
+            "functions": true,
+            "graphql": true,
+            "messaging": true
+        },
+        "protocols": {
+            "rest": true,
+            "graphql": true,
+            "websocket": true
+        },
+        "auth": {
+            "methods": {
+                "jwt": true,
+                "phone": true,
+                "invites": true,
+                "anonymous": true,
+                "email-otp": true,
+                "magic-url": true,
+                "email-password": true
+            },
+            "security": {
+                "duration": 31536000,
+                "limit": null,
+                "sessionsLimit": 10,
+                "passwordHistory": null,
+                "passwordDictionary": false,
+                "personalDataCheck": false,
+                "sessionAlerts": false,
+                "mockNumbers": []
+            }
+        }
+    },
+    "functions": [
+        {
+            "$id": "6ac7adcf0015da2b466b",
+            "name": "summarizer",
+            "runtime": "node-18.0",
+            "path": "functions/summarizer",
+            "previewDomainTarget": "region",
+            "previewDomainLabel": "starter-function-y24y",
+            "entrypoint": "src/main.js",
+            "execute": [
+                "any",
+                "users"
+            ],
+            "enabled": true,
+            "logging": true,
+            "events": [],
+            "schedule": "",
+            "timeout": 15,
+            "commands": "npm install",
+            "scopes": [
+                "users.read"
+            ],
+            "installationId": "",
+            "providerRepositoryId": "",
+            "providerBranch": "main",
+            "providerSilentMode": false,
+            "providerRootDirectory": "./",
+            "providerBranches": [],
+            "providerPaths": [],
+            "buildSpecification": "s-2vcpu-2gb",
+            "runtimeSpecification": "s-0.5vcpu-512mb",
+            "deploymentRetention": 0
+        },
+        {
+            "$id": "6ac9236400377cff8e57",
+            "name": "chatbot",
+            "runtime": "node-18.0",
+            "path": "functions/chatbot",
+            "previewDomainTarget": "region",
+            "previewDomainLabel": "chatbot-6ac9",
+            "entrypoint": "src/main.js",
+            "execute": [
+                "any",
+                "users"
+            ],
+            "enabled": true,
+            "logging": true,
+            "events": [],
+            "schedule": "",
+            "timeout": 15,
+            "commands": "npm install",
+            "scopes": [
+                "users.read"
+            ],
+            "installationId": "",
+            "providerRepositoryId": "",
+            "providerBranch": "main",
+            "providerSilentMode": false,
+            "providerRootDirectory": "./",
+            "providerBranches": [],
+            "providerPaths": [],
+            "buildSpecification": "s-2vcpu-2gb",
+            "runtimeSpecification": "s-0.5vcpu-512mb",
+            "deploymentRetention": 0
+        }
+    ],
+    "tablesDB": [
+        {
+            "$id": "6ac75fc400236fe9870b",
+            "name": "Production TablesDB",
+            "enabled": true
+        }
+    ],
+    "tables": [
+        {
+            "$id": "6ac76077000d73dd7443",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "databaseId": "6ac75fc400236fe9870b",
+            "name": "videos",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                { "key": "title", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "description", "type": "text", "required": false, "array": false, "default": null, "encrypt": false },
+                { "key": "subject", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "fileId", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "teacherId", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "teacherName", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "date", "type": "varchar", "required": false, "array": false, "size": 100, "default": null, "encrypt": false },
+                { "key": "createdAt", "type": "varchar", "required": true, "array": false, "size": 100, "default": null, "encrypt": false }
+            ],
+            "indexes": [
+                { "key": "subject_idx", "type": "key", "status": "available", "columns": ["subject"], "orders": ["asc"] },
+                { "key": "teacher_idx", "type": "key", "status": "available", "columns": ["teacherId"], "orders": ["asc"] }
+            ]
+        },
+        {
+            "$id": "6ac799bd000f5d400814",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "databaseId": "6ac75fc400236fe9870b",
+            "name": "notes table",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                { "key": "title", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "content", "type": "mediumtext", "required": true, "array": false, "default": null, "encrypt": false },
+                { "key": "videoId", "type": "varchar", "required": false, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "studentId", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "studentName", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "createdAt", "type": "varchar", "required": true, "array": false, "size": 100, "default": null, "encrypt": false },
+                { "key": "updatedAt", "type": "varchar", "required": true, "array": false, "size": 100, "default": null, "encrypt": false },
+                { "key": "upvotes", "type": "integer", "required": false, "array": false, "default": null, "min": -9223372036854775808, "max": 9223372036854775807 },
+                { "key": "upvotedBy", "type": "varchar", "required": false, "array": false, "size": 5000, "default": null, "encrypt": false },
+                { "key": "fileId", "type": "varchar", "required": false, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "fileName", "type": "varchar", "required": false, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "fileType", "type": "varchar", "required": false, "array": false, "size": 100, "default": null, "encrypt": false },
+                { "key": "fileSize", "type": "integer", "required": false, "array": false, "default": null, "min": -9223372036854775808, "max": 9223372036854775807 },
+                { "key": "extractedText", "type": "mediumtext", "required": false, "array": false, "default": null, "encrypt": false }
+            ],
+            "indexes": [
+                { "key": "student_idx", "type": "key", "status": "available", "columns": ["studentId"], "orders": ["asc"] },
+                { "key": "video_idx", "type": "key", "status": "available", "columns": ["videoId"], "orders": ["asc"] }
+            ]
+        },
+        {
+            "$id": "6ac91f33003b55aed0b7",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "databaseId": "6ac75fc400236fe9870b",
+            "name": "chats",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                { "key": "title", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "userId", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "userName", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "lastMessage", "type": "varchar", "required": false, "array": false, "size": 500, "default": null, "encrypt": false },
+                { "key": "messageCount", "type": "integer", "required": false, "array": false, "default": 0, "min": -9223372036854775808, "max": 9223372036854775807 },
+                { "key": "createdAt", "type": "varchar", "required": true, "array": false, "size": 100, "default": null, "encrypt": false },
+                { "key": "updatedAt", "type": "varchar", "required": true, "array": false, "size": 100, "default": null, "encrypt": false }
+            ],
+            "indexes": [
+                { "key": "user_idx", "type": "key", "status": "available", "columns": ["userId"], "orders": ["asc"] },
+                { "key": "updated_idx", "type": "key", "status": "available", "columns": ["updatedAt"], "orders": ["desc"] }
+            ]
+        },
+        {
+            "$id": "6ac9211100274e8441b2",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "databaseId": "6ac75fc400236fe9870b",
+            "name": "messages",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                { "key": "chatId", "type": "varchar", "required": true, "array": false, "size": 255, "default": null, "encrypt": false },
+                { "key": "role", "type": "varchar", "required": true, "array": false, "size": 20, "default": null, "encrypt": false },
+                { "key": "content", "type": "mediumtext", "required": true, "array": false, "default": null, "encrypt": false },
+                { "key": "createdAt", "type": "varchar", "required": true, "array": false, "size": 100, "default": null, "encrypt": false }
+            ],
+            "indexes": [
+                { "key": "chat_idx", "type": "key", "status": "available", "columns": ["chatId"], "orders": ["asc"] },
+                { "key": "created_idx", "type": "key", "status": "available", "columns": ["createdAt"], "orders": ["asc"] }
+            ]
+        }
+    ],
+    "buckets": [
+        {
+            "$id": "6ac79b48003e09eb8edb",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "fileSecurity": false,
+            "name": "class catch Videos",
+            "enabled": true,
+            "maximumFileSize": 50000000,
+            "allowedFileExtensions": [],
+            "compression": "none",
+            "encryption": true,
+            "antivirus": true
+        }
+    ]
+}

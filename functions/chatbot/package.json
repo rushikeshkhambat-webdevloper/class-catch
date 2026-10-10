@@ -1,0 +1,16 @@
+{
+  "name": "chatbot",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/main.js",
+  "dependencies": {
+    "ai": "^4.0.0",
+    "@ai-sdk/groq": "^1.0.0",
+    "node-appwrite": "^14.0.0",
+    "pdf-parse": "^1.1.1",
+    "mammoth": "^1.8.0"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}
